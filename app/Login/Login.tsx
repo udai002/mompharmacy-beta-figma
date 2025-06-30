@@ -34,7 +34,7 @@ export default function LoginScreen() {
   const flatListRef = useRef(null);
   const router = useRouter();
 
-  const { loginWithOtp } = userAuth();
+  const { loginWithOtp  , loginWithWhatsappOtp} = userAuth();
 
   const taglineText = (
     <>
@@ -54,7 +54,7 @@ export default function LoginScreen() {
     }
 
     setLoading(true);
-    await loginWithOtp(input);
+    await loginWithWhatsappOtp(input);
     setLoading(false);
   };
 
@@ -144,7 +144,7 @@ export default function LoginScreen() {
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.otpText}>Get OTP</Text>
+                <Text style={styles.otpText}>Get OTP via Whatsapp</Text>
               )}
             </TouchableOpacity>
 

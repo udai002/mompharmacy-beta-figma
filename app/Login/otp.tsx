@@ -33,7 +33,7 @@ export default function OtpScreen() {
   const inputRefs = useRef<(TextInput | null)[]>([]);
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { verifyOtp } = userAuth();
+  const { verifyOtp , verifyWhatsappOtp } = userAuth();
   const params = useLocalSearchParams();
   const user = params.user;
   const isRegistration = params.isRegistration === "true";
@@ -85,7 +85,7 @@ export default function OtpScreen() {
     const fullOtp = otp.join("");
     setShowLoader(true);
     try {
-      const data = await verifyOtp(fullOtp, user);
+      const data = await verifyWhatsappOtp(fullOtp, user);
       if (data) {
         if (data.isExist) {
           router.replace("/Login/medintro");

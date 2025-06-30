@@ -161,6 +161,57 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // login with whatsapp otp
+  async function loginWithWhatsappOtp(mobileNo) {
+    try {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ mobileNo })
+      }
+      const response = await apiClient("api/user/whatsapp-otp", options)
+      if (response) {
+        router.replace({ pathname: '/Login/otp', params: { user: mobileNo } });
+      } else {
+        Alert.alert("Invalid Otp")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //verify with whatsapp otp
+  async function verifyWhatsappOtp(otp, mobileNo) {
+    try {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ mobileNo, otp })
+      }
+      const response = await apiClient("api/user/whatapp-otp-verification", options)
+      if (response) {
+        await AsyncStorage.setItem('jwt_token', JSON.stringify(response.token));
+        setToken(response.token);
+        setIsLoggedIn(true);
+        await getUserDetails(response.token);
+        console.log('OTP verified:', response);
+        return response;
+      } else {
+        Alert.alert('OTP verification failed', 'Invalid OTP. Please try again.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error during OTP verification:', error);
+      Alert.alert('An error occurred during OTP verification. Please try again.');
+      return false;
+    }
+  }
+
+
   return (
     <AuthContext.Provider value={{
       loginWithOtp,
@@ -172,7 +223,9 @@ export const AuthProvider = ({ children }) => {
       isRegistrationComplete,
       getUserDetails,
       postData,
-      ExtractParseToken
+      ExtractParseToken,
+      loginWithWhatsappOtp,
+      verifyWhatsappOtp
     }}>
       {loading ? <LoadingScreen /> : children}
     </AuthContext.Provider>

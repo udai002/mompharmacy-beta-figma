@@ -1,6 +1,8 @@
+// http://13.233.194.93:3000
+
 async function apiClient(path , options){
     try{
-        const response = await fetch(`http://13.233.194.93:3000/${path}` , options);
+        const response = await fetch(`http://192.168.1.19:3000/${path}` , options);
         console.log("this is res:",response)
 
         if(response.ok){
